@@ -1,7 +1,8 @@
 // --- Constants and Configuration ---
 const model = 'gemini-2.5-flash-preview-09-2025';
-// NOTE: The API key is automatically provided in this runtime environment.
-// For production, you must use a secure server-side proxy to store your key.
+
+//* NOTE: The API key is automatically provided in this runtime environment.
+//! For production, you must use a secure server-side proxy to store your key.
 const apiKey = "";
 const MAX_ATTEMPTS = 3;
 
@@ -13,14 +14,14 @@ const chatHistory = document.getElementById('chat-history');
 const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 
-let chatHistoryData = []; // Stores chat history (needed for context in future updates)
+let chatHistoryData = []; // لتخزين سجل الدردشة (مطلوب للحفاظ على السياق في المستقبل)
 
 // --- Utility Functions ---
 
 /**
- * Calculates delay time for exponential backoff mechanism.
- * @param {number} attempt - Current attempt number (0, 1, 2, ...).
- * @returns {number} - Delay time in milliseconds.
+ * يحسب زمن التأخير لآلية المحاولات المتزايدة.
+ * @param {number} attempt - رقم المحاولة الحالي (0, 1, 2, ...).
+ * @returns {number} - زمن التأخير بالمللي ثانية.
  */
 function getDelay(attempt) {
     // 1000ms * 2^attempt
@@ -28,10 +29,10 @@ function getDelay(attempt) {
 }
 
 /**
- * Adds a message to the chat history and displays it in the UI.
- * @param {string} text - Message text.
- * @param {string} sender - Message sender ('user' or 'gemini').
- * @param {Array<{uri: string, title: string}>} [sources=[]] - Source attributions (only for gemini).
+ * يضيف رسالة إلى سجل الدردشة ويعرضها في الواجهة.
+ * @param {string} text - نص الرسالة.
+ * @param {string} sender - مرسل الرسالة ('user' أو 'gemini').
+ * @param {Array<{uri: string, title: string}>} [sources=[]] - مصادر الاستدلال (فقط لـ gemini).
  */
 function addMessage(text, sender, sources = []) {
     const row = document.createElement('div');
@@ -40,22 +41,22 @@ function addMessage(text, sender, sources = []) {
     const bubble = document.createElement('div');
     bubble.classList.add('message-bubble', `bubble-${sender}`);
 
-    // Use innerHTML to support Markdown formatting (**bold**, *italics*)
+    // استخدام innerHTML لدعم تنسيق Markdown (مثل **bold** و *italics*)
     bubble.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
     row.appendChild(bubble);
 
-    // Add source attributions for Gemini messages
+    // إضافة مصادر الاستدلال في حالة رسائل Gemini
     if (sender === 'gemini' && sources.length > 0) {
         const sourcesList = document.createElement('div');
         sourcesList.classList.add('sources-list');
-        sourcesList.innerHTML = '<strong>Sources:</strong>';
+        sourcesList.innerHTML = '<strong>المصادر:</strong>';
 
         sources.forEach(source => {
             const link = document.createElement('a');
             link.href = source.uri;
             link.target = '_blank';
-            // Display source title
+            // عرض عنوان المصدر
             link.textContent = source.title || source.uri;
             sourcesList.appendChild(link);
         });
@@ -63,14 +64,14 @@ function addMessage(text, sender, sources = []) {
     }
 
     chatHistory.appendChild(row);
-    chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
+    chatHistory.scrollTop = chatHistory.scrollHeight; // التمرير إلى الأسفل
 }
 
 /**
- * Adds loading indicator (animated dots) for Gemini message.
+ * يضيف مؤشر التحميل (النقاط المتحركة) لرسالة Gemini.
  */
 function appendLoadingDots() {
-    removeLoadingDots(); // Make sure to remove any previous indicator
+    removeLoadingDots(); // التأكد من إزالة أي مؤشر سابق
 
     const row = document.createElement('div');
     row.classList.add('message-row', 'message-gemini', 'loading-indicator');
@@ -86,20 +87,20 @@ function appendLoadingDots() {
     chatHistory.appendChild(row);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
-    // Disable input and send button to prevent multiple sends
+    // تعطيل الإدخال وزر الإرسال لمنع الإرسال المتعدد
     sendBtn.disabled = true;
     chatInput.disabled = true;
 }
 
 /**
- * Removes loading indicator.
+ * يزيل مؤشر التحميل.
  */
 function removeLoadingDots() {
     const loadingIndicator = chatHistory.querySelector('.loading-indicator');
     if (loadingIndicator) {
         loadingIndicator.remove();
     }
-    // Enable input and send button
+    // تفعيل الإدخال وزر الإرسال
     sendBtn.disabled = false;
     chatInput.disabled = false;
 }
@@ -107,22 +108,22 @@ function removeLoadingDots() {
 // --- API Interaction ---
 
 /**
- * Interacts with Gemini API to fetch a response.
- * @param {string} prompt - User prompt.
+ * يتفاعل مع Gemini API لجلب الرد.
+ * @param {string} prompt - استعلام المستخدم.
  */
 async function fetchGeminiResponse(prompt) {
     // NOTE: The API key is assumed to be available in the environment or set up correctly
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-    // Prepare request payload
+    // إعداد حمولة الطلب (Payload)
     const payload = {
-        // Only using current prompt in this simple design
+        // نستخدم فقط الاستعلام الحالي في هذا التصميم البسيط
         contents: [{ parts: [{ text: prompt }] }],
 
-        // Enable grounding feature for web search
+        // تفعيل ميزة البحث (Grounding) - للاتصال بالإنترنت
         tools: [{ "google_search": {} }],
 
-        // Direct model to reply in Arabic
+        // توجيه النموذج للرد باللغة العربية
         systemInstruction: {
             parts: [{ text: "You are a concise and helpful chat assistant. Answer the user's questions clearly based on the provided search results. The answer must be in Arabic." }]
         },
@@ -131,7 +132,7 @@ async function fetchGeminiResponse(prompt) {
     let response;
     let attempt = 0;
 
-    // Exponential backoff mechanism
+    // تطبيق آلية المحاولات المتزايدة (Exponential Backoff)
     while (attempt < MAX_ATTEMPTS) {
         try {
             console.log(`Attempt ${attempt + 1}: Fetching response from Gemini...`);
@@ -141,28 +142,28 @@ async function fetchGeminiResponse(prompt) {
                 body: JSON.stringify(payload)
             });
 
-            // If response is OK, break the loop
+            // إذا كانت الاستجابة ناجحة (OK) نخرج من الحلقة
             if (response.ok) {
                 break;
             } else if (response.status === 429 && attempt < MAX_ATTEMPTS - 1) {
-                // Rate limiting error, wait and retry
+                // خطأ معدل الطلبات (Rate limit)، الانتظار وإعادة المحاولة
                 const delay = getDelay(attempt);
                 console.warn(`Rate limit (429) hit. Retrying in ${delay / 1000}s...`);
                 await new Promise(resolve => setTimeout(resolve, delay));
                 attempt++;
             } else {
-                // Other unrecoverable errors (4xx, 5xx)
+                // خطأ آخر (4xx, 5xx) غير قابل للاسترداد
                 const errorBody = await response.text();
                 console.error(`API returned status ${response.status}: ${response.statusText}`, "Error Details:", errorBody);
                 throw new Error(`API returned status ${response.status} (${response.statusText})`);
             }
         } catch (error) {
             console.error("Fetch/Network Error:", error);
-            // On last attempt, throw error
+            // إذا كانت هذه هي المحاولة الأخيرة، نطلق الخطأ
             if (attempt === MAX_ATTEMPTS - 1) {
                 throw new Error("Failed to connect to the AI service after multiple retries.");
             }
-            // Wait before next retry on network error
+            // الانتظار قبل المحاولة التالية لخطأ شبكة
             const delay = getDelay(attempt);
             console.warn(`Network failure. Retrying in ${delay / 1000}s...`);
             await new Promise(resolve => setTimeout(resolve, delay));
@@ -171,7 +172,7 @@ async function fetchGeminiResponse(prompt) {
     }
 
     if (!response || !response.ok) {
-        // If exited loop with no successful response
+        // إذا خرجنا من الحلقة دون استجابة ناجحة
         throw new Error("Maximum retries reached or unrecoverable error occurred.");
     }
 
@@ -190,13 +191,13 @@ async function fetchGeminiResponse(prompt) {
                     uri: attribution.web?.uri,
                     title: attribution.web?.title,
                 }))
-                .filter(source => source.uri); // Filter out sources without URL
+                .filter(source => source.uri); // تصفية المصادر التي لا تحتوي على رابط
         }
 
         return { text, sources };
 
     } else {
-        // Case: No response text (e.g. content blocked)
+        // حالة عدم وجود نص في الاستجابة (مثل حظر المحتوى)
         const blockReason = candidate?.finishReason || 'UNKNOWN';
         console.error("AI response lacked text content. Reason:", blockReason, result);
         throw new Error("AI did not provide a text response. Content was likely blocked or response was empty.");
@@ -204,77 +205,77 @@ async function fetchGeminiResponse(prompt) {
 }
 
 /**
- * Handles sending user messages.
+ * معالج إرسال رسالة المستخدم.
  */
 async function handleSend() {
     const prompt = chatInput.value.trim();
     if (!prompt) return;
 
-    // 1. Add user message to UI
+    // 1. إضافة رسالة المستخدم إلى الواجهة
     addMessage(prompt, 'user');
     chatHistoryData.push({ text: prompt, sender: 'user' });
 
-    // 2. Clear input field
+    // 2. مسح حقل الإدخال
     chatInput.value = '';
 
-    // 3. Add loading indicator
+    // 3. إضافة مؤشر التحميل
     appendLoadingDots();
 
     try {
-        // 4. Fetch response from Gemini
+        // 4. جلب الرد من Gemini
         const { text, sources } = await fetchGeminiResponse(prompt);
 
-        // 5. Remove loading indicator and add Gemini message
+        // 5. إزالة مؤشر التحميل وإضافة رسالة Gemini
         removeLoadingDots();
         addMessage(text, 'gemini', sources);
         chatHistoryData.push({ text: text, sender: 'gemini' });
 
     } catch (error) {
-        // 6. Handle errors
+        // 6. التعامل مع الأخطاء
         console.error("Critical Error during Gemini response:", error);
 
-        // Show error message to user
+        // إظهار رسالة الخطأ للمستخدم
         addMessage(
-            "Sorry, an error occurred while fetching the response. Please try again. (Error details: Check Console)",
+            "عذراً، حدث خطأ أثناء جلب الرد. يرجى المحاولة مرة أخرى. (تفاصيل الخطأ: تحقق من Console)",
             'gemini'
         );
         chatHistoryData.push({ text: "Error: Failed to fetch response.", sender: 'gemini' });
 
     } finally {
-        // 7. Ensure loading indicator is removed and input is enabled
+        // 7. التأكد من إزالة مؤشر التحميل وتفعيل الإدخال
         removeLoadingDots();
-        // Refocus input field for easier typing
+        // إعادة التركيز على حقل الإدخال لسهولة الكتابة
         chatInput.focus();
     }
 }
 
 // --- Event Listeners and Initialization ---
 
-// Open/Close chat window
+// فتح/إغلاق نافذة الدردشة
 chatIcon.addEventListener('click', () => {
     chatWindow.classList.toggle('open');
     if (chatWindow.classList.contains('open')) {
-        chatInput.focus(); // Focus on open
+        chatInput.focus(); // التركيز عند الفتح
     }
 });
 
-// Close chat window
+// إغلاق نافذة الدردشة
 closeChatBtn.addEventListener('click', () => {
     chatWindow.classList.remove('open');
 });
 
-// Send message on button click
+// إرسال الرسالة عند النقر على الزر
 sendBtn.addEventListener('click', handleSend);
 
-// Send message on Enter keypress
+// إرسال الرسالة عند الضغط على مفتاح Enter
 chatInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !sendBtn.disabled) {
-        e.preventDefault(); // Prevent new line
+        e.preventDefault(); // منع الإضافة إلى سطر جديد
         handleSend();
     }
 });
 
-// Function to run code once the page is loaded
+// وظيفة لتشغيل التعليمات البرمجية فور تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Chat widget initialized. Ready to interact with Gemini API.");
 });
