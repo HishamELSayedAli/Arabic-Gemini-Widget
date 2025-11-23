@@ -61,9 +61,9 @@ Restrict the Key: Limit the API key's capabilities in the Google Cloud settings 
 The project has a simple structure focused on frontend components:
 
 Arabic-Gemini-Widget/
-├── chat.html           # Main HTML structure for the chat interface.
-├── style.css           # Styling for the widget (includes RTL adjustments).
-├── script.js           # Core logic, API interaction, and error handling.
-├── jquery-3.6.1.min.js # Helper library (if used).
-├── img/                # Image assets folder.
-└── README.md           # Project documentation.
+            ├── chat.html           # Main HTML structure for the chat interface.
+            ├── style.css           # Styling for the widget (includes RTL adjustments).
+            ├── script.js           # Core logic, API interaction, and error handling.
+            ├── jquery-3.6.1.min.js # Helper library (if used).
+            ├── img/                # Image assets folder.
+            └── README.md           # Project documentation.
