@@ -34,16 +34,16 @@ To get the chat widget working locally, you must obtain and configure your Gemin
 ### 1. Clone the Repository
 
 
-###2. Get Your Gemini API Key
+### 2. Get Your Gemini API Key
 Visit the official Google AI Studio website to generate and copy your API key.
 
-###3. Configure the Key in script.js
+### 3. Configure the Key in script.js
 Open the script.js file and replace the placeholder value in the apiKey variable with your actual key:
 JavaScript
 
 // script.js
 const apiKey = "AIzaSy...YOUR_FULL_API_KEY_GOES_HERE"; 
-###4. Run the Widget
+### 4. Run the Widget
 Simply open the chat.html file directly in your web browser.
 
 🔒 Security Notice (Critical)
