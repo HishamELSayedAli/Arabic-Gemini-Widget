@@ -32,20 +32,21 @@ This project is a fully interactive and self-contained **chat widget** built wit
 To get the chat widget working locally, you must obtain and configure your Gemini API key.
 
 ### 1. Clone the Repository
-
+---
 
 ### 2. Get Your Gemini API Key
 Visit the official Google AI Studio website to generate and copy your API key.
-
+---
 ### 3. Configure the Key in script.js
 Open the script.js file and replace the placeholder value in the apiKey variable with your actual key:
 JavaScript
 
 // script.js
 const apiKey = "AIzaSy...YOUR_FULL_API_KEY_GOES_HERE"; 
+---
 ### 4. Run the Widget
 Simply open the chat.html file directly in your web browser.
-
+---
 🔒 Security Notice (Critical)
 This project, in its current form, exposes your API key directly in the client-side JavaScript code.
 
@@ -56,14 +57,20 @@ DO NOT deploy this code to a public production environment without taking the fo
 Use a Backend Proxy: Implement a server-side proxy (e.g., using Node.js, Python Flask) to store the API key securely as an environment variable and handle all calls to the Gemini API.
 
 Restrict the Key: Limit the API key's capabilities in the Google Cloud settings to accept requests only from specific IP addresses or domains.
-
+---
 📂 Project Structure
 The project has a simple structure focused on frontend components:
 
 Arabic-Gemini-Widget/
+            
             ├── chat.html           # Main HTML structure for the chat interface.
+            
             ├── style.css           # Styling for the widget (includes RTL adjustments).
+            
             ├── script.js           # Core logic, API interaction, and error handling.
+            
             ├── jquery-3.6.1.min.js # Helper library (if used).
+            
             ├── img/                # Image assets folder.
+            
             └── README.md           # Project documentation.
