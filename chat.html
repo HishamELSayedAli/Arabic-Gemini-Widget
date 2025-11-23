@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating chat icon -->
+    <button class="chat-icon" id="chat-icon" aria-label="فتح نافذة الدردشة">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+        </svg>
+    </button>
+    
+    <div class="chat-window" id="chat-window">
+        
+        <!-- Chat Box Header -->
+        <div class="chat-top">
+            <span>مساعد Gemini</span>
+            <button id="close-chat" aria-label="إغلاق نافذة الدردشة">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <!-- Chat log area -->
+        <div class="chat-history" id="chat-history">
+            <div class="message-row message-gemini">
+                <div class="message-bubble bubble-gemini">
+                    مرحباً! أنا مساعدك الآلي الذكي. اسألني أي شيء وسأجيبك باستخدام البحث المباشر.
+                </div>
+            </div>
+            <!-- Messages will be added here using JavaScript -->
+        </div>
+        
+        <!-- Input and Send Area -->
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالتك..." autofocus>
+            <button id="send-btn" class="send-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
