@@ -1,7 +1,8 @@
 // --- Constants and Configuration ---
 const model = 'gemini-2.5-flash-preview-09-2025';
-// NOTE: The API key is automatically provided in this runtime environment.
-// For production, you must use a secure server-side proxy to store your key.
+
+//* NOTE: The API key is automatically provided in this runtime environment.
+//! For production, you must use a secure server-side proxy to store your key.
 const apiKey = "";
 const MAX_ATTEMPTS = 3;
 
