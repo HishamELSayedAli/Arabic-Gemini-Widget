@@ -74,3 +74,8 @@ Arabic-Gemini-Widget/
             ├── img/                # Image assets folder.
             
             └── README.md           # Project documentation.
+
+
+---
+
+> **Developed by [HishamELSayedAli](https://github.com/HishamELSayedAli)**
