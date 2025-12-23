@@ -1,4 +1,4 @@
-# 🤖 Arabic Gemini Chat Widget
+# 🤖 Arabic Gemini Chat 
 
 Welcome to the **Arabic-Gemini-Widget** repository!
 
